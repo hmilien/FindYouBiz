@@ -1,0 +1,56 @@
+{
+  "expo": {
+      //  "name": "ListApp (MyListing version)",
+      //  "description": "React Native app for Listing Directory, demo website: http://mylisting.inspireui.com. Download app from https://shrtm.nu/MOeZ",
+      //  "slug": "listapp-mylisting",
+
+    "name": "ListApp",
+    "description": "React Native app for Listing Directory, demo website: http://listapp.inspireui.com. Download app from https://shrtm.nu/MOeZ",
+    "slug": "listapp",
+
+      //  "name": "ListApp (Listify version)",
+      //  "description": "React Native app for Listing Directory, demo website:  http://listify.inspireui.com. Download app from https://shrtm.nu/MOeZ",
+      //  "slug": "listapp-listify",
+
+    "privacy": "public",
+    "sdkVersion": "27.0.0",
+    "version": "v1.4.2",
+    "orientation": "portrait",
+    "primaryColor": "#cccccc",
+    "icon": "./assets/icon.png",
+    "loading": {
+      "icon": "./assets/icon.png",
+      "hideExponentText": false
+    },
+    "packagerOpts": {
+      "assetExts": [
+        "ttf",
+        "mp4"
+      ]
+    },
+    "assetBundlePatterns": [
+      "assets/images/*",
+      "assets/fonts/*",
+      "assets/images/icons/*"
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.inspireui.listapp",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Your current location will be displayed on the map and used for directions"
+      }
+    },
+    "android": {
+      "package": "com.inspireui.listapp",
+      "googleServicesFile": "./google-services.json"
+    },
+    "facebookAppId": "1809822172592320",
+    "facebookDisplayName": "beoNews",
+
+    "isDetached": true
+  }
+}

@@ -1,0 +1,39 @@
+/** @format */
+
+import React, {
+  StyleSheet,
+  Platform,
+  Dimensions,
+  PixelRatio,
+} from 'react-native'
+import { Color, Constants } from '@common'
+
+const { width, height, scale } = Dimensions.get('window'),
+  vw = width / 100,
+  vh = height / 100,
+  vmin = Math.min(vw, vh),
+  vmax = Math.max(vw, vh)
+
+export default StyleSheet.create({
+  body: {
+    flex: 1,
+  },
+  flatlist: {
+    flex: 1,
+    width: width,
+  },
+  topBar: {
+    width: width,
+    height: 30,
+    flexDirection: Constants.RTL ? 'row-reverse' : 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingRight: 15,
+  },
+  empty: {
+    marginTop: 16,
+    marginRight: 16,
+    marginBottom: 16,
+    marginLeft: 16,
+  },
+})

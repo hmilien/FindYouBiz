@@ -1,0 +1,17 @@
+node_modules/**/*
+.expo/*
+npm-debug.*
+
+.idea
+*.log
+node_modules
+ios/build
+android/build
+android/build.grade
+android/.gradle
+android/app/build
+android/local.properties
+/*.bat
+/yarn.lock
+
+

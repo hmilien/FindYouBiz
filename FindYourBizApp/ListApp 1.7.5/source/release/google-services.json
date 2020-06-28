@@ -1,0 +1,151 @@
+{
+  "project_info": {
+    "project_number": "963188400252",
+    "firebase_url": "https://listapp-mobile.firebaseio.com",
+    "project_id": "listapp-mobile",
+    "storage_bucket": "listapp-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963188400252:android:daabdf41212e0595",
+        "android_client_info": {
+          "package_name": "com.inspireui.listapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBczF7J0iydQliLd5XjYcsz-5BZDVLn7c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963188400252:android:2731d193c990e431",
+        "android_client_info": {
+          "package_name": "inspireui.listapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBczF7J0iydQliLd5XjYcsz-5BZDVLn7c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963188400252:android:2731d193c990e431",
+        "android_client_info": {
+          "package_name": "com.inspireui.listapp.reactnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBczF7J0iydQliLd5XjYcsz-5BZDVLn7c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963188400252:android:2731d193c990e431",
+        "android_client_info": {
+          "package_name": "com.inspireui.listapp.mylisting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "963188400252-g16mr085c1761tlbbn9qqcd39m6pr9tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBczF7J0iydQliLd5XjYcsz-5BZDVLn7c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

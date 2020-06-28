@@ -1,0 +1,13 @@
+{
+  "printWidth": 80,
+  "parser": "babylon",
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "jsxBracketSameLine": true,
+  "arrowParens": "always",
+  "insertPragma": true,
+  "semi": false,
+  "trailingComma": "es5",
+  "filepath": "App/**/*.js"
+}

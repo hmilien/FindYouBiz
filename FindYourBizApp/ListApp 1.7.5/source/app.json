@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "ListApp",
+    "description": "React Native app for Listing Directory, demo website: http://mylisting.inspireui.com. Download app from \nhttps://shrtm.nu/MOeZ",
+    "slug": "listapp-mylisting",
+    "privacy": "public",
+    "sdkVersion": "36.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.8.1",
+    "orientation": "portrait",
+    "icon": "assets/icon.png",
+    "splash": {
+      "image": "assets/splash.png",
+      "resizeMode": "cover"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.inspireui.listapplisting",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Your current location will be displayed on the map and used for directions"
+      },
+      "loadJSInBackgroundExperimental": true,
+      "buildNumber": "2"
+    },
+    "android": {
+      "package": "com.inspireui.listapp.mylisting",
+      "versionCode": 8,
+      "googleServicesFile": "./release/google-services.json"
+    },
+    "facebookAppId": "1809822172592320",
+    "facebookDisplayName": "beoNews",
+    "updates": {
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    }
+  }
+}
