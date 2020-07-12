@@ -1,20 +1,20 @@
 import 'source-map-support/register'
-import { createLogger } from '../../utils/logger'
+import { createLogger } from '../../../utils/logger'
 import { getUserId} from '../utils'
-import { deleteTodo } from "../../dataLayer/todoRepository";
+import { deleteListing } from "../../../repository/listing";
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
-const logger = createLogger('todo')
+const logger = createLogger('listing')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('Processing event, delete todo: ', event)
+  console.log('Processing event, delete listing: ', event)
     
-  const todoId = event.pathParameters.todoId
+  const listingId = event.pathParameters.listingId
   const userId= getUserId(event)
 
-  await deleteTodo(userId,todoId)
+  await deleteListing(userId,listingId)
 
-  logger.info('Todo deleted : ',todoId)
+  logger.info('Listing deleted : ',listingId)
 
   return {
     statusCode: 202,
@@ -22,7 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    body: `Todo ${todoId} deleted`
+    body: `Listing ${listingId} deleted`
   }
 }
 

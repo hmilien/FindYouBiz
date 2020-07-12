@@ -1,8 +1,8 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { getUserId } from '../utils'
-import { createLogger } from '../../utils/logger'
-import { getTodos } from "../../dataLayer/todoRepository";
+import { createLogger } from '../../../utils/logger'
+import { getListing } from "../../../repository/listing";
 
 
 const logger = createLogger('todo')
@@ -11,12 +11,12 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   console.log('Processing getTodo event: ', event)
   
   const userId = getUserId(event)
-  const items = await getTodos(userId)
+  const items = await getListing(userId)
   
   console.log('Processing results: ', items)
 
   if (items.length !== 0) {
-    logger.info('todos found for user id: ',userId)
+    logger.info('listing found for user id: ',userId)
     return {
       statusCode: 200,
       headers: {
@@ -27,7 +27,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
   }
   
-  logger.info('no todos found for user id: ',userId)
+  logger.info('no listing found for user id: ',userId)
 
   return {
     statusCode: 204,

@@ -1,9 +1,9 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
-import { createLogger } from '../../utils/logger'
+import { UpdateTodoRequest } from '../../../requests/UpdateListingRequest'
+import { createLogger } from '../../../utils/logger'
 import { getUserId} from '../utils'
-import {updateTodo } from "../../dataLayer/todoRepository";
+import {updateTodo } from "../../../repository/listing";
 
 const logger = createLogger('todo')
 

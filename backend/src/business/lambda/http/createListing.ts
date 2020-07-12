@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../../utils/logger'
-import { CreateTodoRequest } from '../../../requests/CreateTodoRequest'
+import { CreateTodoRequest } from '../../../requests/CreateListingRequest'
 import * as uuid from 'uuid'
 import { getUserId } from '../utils'
 import { createTodo } from "../../../repository/listing";
@@ -11,7 +11,7 @@ const logger = createLogger('todo')
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     console.log('Processing event, create todo: ', event)
    
-    const todoId = uuid.v4()
+    const listingId = uuid.v4()
     const userId = getUserId(event)
     const parsedBody: CreateTodoRequest = JSON.parse(event.body)
     
@@ -26,7 +26,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       }
     }
 
-    const item = await createTodo(userId,todoId,parsedBody)
+    const item = await createTodo(userId,listingId,parsedBody)
 
     logger.info('New Item added : ',item)
     console.log('Processing event, new Todo: ', item)
