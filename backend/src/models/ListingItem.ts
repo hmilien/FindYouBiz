@@ -1,9 +1,21 @@
+import { String } from "aws-sdk/clients/apigateway";
+
 export interface ListingItem {
-  userId: string
   listingId: string
+  marketCategory: {
+    CatergoryId:string
+    CategoryName: string
+  }
+  businessCategory:{
+    CategoryId:string
+    CategoryName:string
+  }
+  businessModel:string
+  description:string
+  phoneNumber:string
+  postalCode:string
+  address:string
   createdAt: string
-  name: string
-  dueDate: string
-  done: boolean
-  attachmentUrl?: string
+  pictureUrl?: string
+  createdBy:string
 }

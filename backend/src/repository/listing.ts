@@ -1,33 +1,26 @@
 import * as AWS  from 'aws-sdk';
 import { ListingItem } from "../models/ListingItem";
-import { UpdateTodoRequest } from "../requests/UpdateListingRequest";
-import { CreateTodoRequest } from '../requests/CreateListingRequest';
+import { UpdateListingRequest } from "../requests/UpdateListingRequest";
+import { CreateListingRequest } from '../requests/CreateListingRequest';
 
 const listingTable = process.env.LISTING_TABLE
-const userIdIndex = process.env.USER_ID_INDEX
 const docClient = new AWS.DynamoDB.DocumentClient()
 
-export async function  getTodoById(userId:string,listingId:string ): Promise<ListingItem> {
+export async function  getListingById(userId:string,listingId:string ): Promise<ListingItem> {
     const results = await docClient.query({
       TableName : listingTable,
-      IndexName : userIdIndex,
-      KeyConditionExpression: 'todoId = :todoId and userId = :userId',
+      KeyConditionExpression: 'listingId = :listingId and userId = :userId',
       ExpressionAttributeValues: {
-          ':todoId': listingId,
+          ':listingId': listingId,
           ':userId': userId
       }
     }).promise()
     return results.Items[0] as ListingItem
   }
   
-  export async function getListing(userId:string):Promise<ListingItem[]>{
+  export async function getListing():Promise<ListingItem[]>{
     const result = await docClient.query({
-        TableName : listingTable,
-        IndexName : userIdIndex,
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: {
-            ':userId': userId
-        }
+        TableName : listingTable
     }).promise()
 
     if(result.Items.length > 0)
@@ -37,36 +30,34 @@ export async function  getTodoById(userId:string,listingId:string ): Promise<Lis
   }
 
   export async function  deleteListing(userId:string,listingId:string ) {
-    const item = await getTodoById(userId,listingId)
+    const item = await getListingById(userId,listingId)
     console.log('Processing Query for delete: ', item)
     await docClient.delete({
       TableName: listingTable,
-      Key:{ "userId": userId, "createdAt":item.createdAt}
+      Key:{ "listingId": listingId, "createdBy":item.createdBy}
     }).promise()
   }
 
-  export async function updateTodo(userId:string, listingId, item:UpdateTodoRequest){
-    const todoItem = await getTodoById(userId,listingId)
+  export async function updateListing(userId:string, listingId, item:UpdateListingRequest){
+    const listingItem = await getListingById(userId,listingId)
 
     await docClient.update({
       TableName: listingTable,
-      Key:{ "userId": userId, "createdAt":todoItem.createdAt},
-      ExpressionAttributeNames: {"#N": "name"},
-      UpdateExpression: "set #N = :name, dueDate:duedate, done:done",
+      Key:{ "listingId": listingId, "createdBy":listingItem.createdBy},
+      UpdateExpression: "set description = :description, phoneNumber= :phoneNumber",
       ExpressionAttributeValues: {
-          ":name": item.name,
-          ":dueDate": item.dueDate,
-          ":done": item.done
+          ":description": item.description,
+          ":phoneNumber": item.phoneNumber
       },
       ReturnValues: "UPDATED_NEW"
       
     }).promise()
   }
 
-  export async function createTodo(userId:string,listingId:string, request:CreateTodoRequest): Promise<ListingItem>{
+  export async function createListing(userId:string,listingId:string, request:CreateListingRequest): Promise<ListingItem>{
     const item = {
         listingId: listingId,
-        userId: userId,
+        createdBy: userId,
         createdAt: new Date().toLocaleTimeString(),
         ...request
       }
@@ -79,14 +70,14 @@ export async function  getTodoById(userId:string,listingId:string ): Promise<Lis
       return item as ListingItem
   }
   export async function  setAttachmentUrl(userId: string, listingId: string, attachmentUrl:string){
-    const item = await getTodoById(userId, listingId)
-    item.attachmentUrl = attachmentUrl;
+    const item = await getListingById(userId, listingId)
+    item.pictureUrl = attachmentUrl;
     await docClient.update({
       TableName: listingTable,
-      Key:{ "userId": userId, "createdAt":item.createdAt},
+      Key:{ "listingId": listingId, "createdAt":item.createdBy},
       UpdateExpression: "set attachmentUrl = :attachmentUrl",
       ExpressionAttributeValues: {
-          ":attachmentUrl":  item.attachmentUrl
+          ":attachmentUrl":  item.pictureUrl
       },
       ReturnValues: "UPDATED_NEW"
     }).promise()
