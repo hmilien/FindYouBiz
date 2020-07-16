@@ -11,7 +11,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   console.log('Processing getTodo event: ', event)
   
   const userId = getUserId(event)
-  const items = await getListing(userId)
+  const items = await getListing()
   
   console.log('Processing results: ', items)
 

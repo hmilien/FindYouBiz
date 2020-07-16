@@ -1,4 +1,3 @@
-import { String } from "aws-sdk/clients/apigateway";
 
 export interface ListingItem {
   listingId: string

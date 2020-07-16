@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../../utils/logger'
-import { CreateListingRequest } from '../../../requests/CreateListingRequest'
+import { CreateListingRequest } from '../../../requests/createListingRequest'
 import * as uuid from 'uuid'
 import { getUserId } from '../utils'
 import { createListing } from "../../../repository/listing";

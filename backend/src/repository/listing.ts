@@ -1,7 +1,7 @@
 import * as AWS  from 'aws-sdk';
 import { ListingItem } from "../models/ListingItem";
-import { UpdateListingRequest } from "../requests/UpdateListingRequest";
-import { CreateListingRequest } from '../requests/CreateListingRequest';
+import { UpdateListingRequest } from "../requests/updateListingRequest";
+import { CreateListingRequest } from '../requests/createListingRequest';
 
 const listingTable = process.env.LISTING_TABLE
 const docClient = new AWS.DynamoDB.DocumentClient()
@@ -69,20 +69,20 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
 
       return item as ListingItem
   }
-  export async function  setAttachmentUrl(userId: string, listingId: string, attachmentUrl:string){
+  export async function  setAttachmentUrl(userId: string, listingId: string, pictureUrl:string){
     const item = await getListingById(userId, listingId)
-    item.pictureUrl = attachmentUrl;
+    item.pictureUrl = pictureUrl;
     await docClient.update({
       TableName: listingTable,
       Key:{ "listingId": listingId, "createdAt":item.createdBy},
-      UpdateExpression: "set attachmentUrl = :attachmentUrl",
+      UpdateExpression: "set pictureUrl = :attachmentUrl",
       ExpressionAttributeValues: {
-          ":attachmentUrl":  item.pictureUrl
+          ":pictureUrl":  item.pictureUrl
       },
       ReturnValues: "UPDATED_NEW"
     }).promise()
   
-    console.log('Url attached: ', attachmentUrl)
+    console.log('Url attached: ', pictureUrl)
   }
 
  

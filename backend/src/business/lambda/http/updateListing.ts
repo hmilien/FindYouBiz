@@ -1,6 +1,6 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
-import { UpdateListingRequest } from '../../../requests/UpdateListingRequest'
+import { UpdateListingRequest } from '../../../requests/updateListingRequest'
 import { createLogger } from '../../../utils/logger'
 import { getUserId} from '../utils'
 import {updateListing } from "../../../repository/listing";
