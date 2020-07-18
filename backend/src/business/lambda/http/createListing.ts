@@ -6,16 +6,16 @@ import * as uuid from 'uuid'
 import { getUserId } from '../utils'
 import { createListing } from "../../../repository/listing";
 
-const logger = createLogger('todo')
+const logger = createLogger('listing')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    console.log('Processing event, create todo: ', event)
+    console.log('Processing event, create listing: ', event)
    
     const listingId = uuid.v4()
     const userId = getUserId(event)
     const parsedBody: CreateListingRequest = JSON.parse(event.body)
     
-    if(!parsedBody.marketCategory){
+    if(!parsedBody.marketName){
       return {
         statusCode: 404,
         headers: {
@@ -29,7 +29,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const item = await createListing(userId,listingId,parsedBody)
 
     logger.info('New Item added : ',item)
-    console.log('Processing event, new Todo: ', item)
+    console.log('Processing event, new listing: ', item)
 
     return {
       statusCode: 201,

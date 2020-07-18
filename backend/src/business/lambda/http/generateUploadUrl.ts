@@ -6,7 +6,7 @@ import { getUploadUrl,getAttachmentUrl} from '../../../repository/imageBucket'
 import { setAttachmentUrl } from "../../../repository/listing";
 
 
-const logger = createLogger('todo')
+const logger = createLogger('listing')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const listingId = event.pathParameters.listingId

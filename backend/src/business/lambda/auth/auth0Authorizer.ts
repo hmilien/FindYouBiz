@@ -1,10 +1,10 @@
 import { CustomAuthorizerEvent, CustomAuthorizerResult } from 'aws-lambda'
 import 'source-map-support/register'
 
-import { verify, decode } from 'jsonwebtoken'
+//import { verify, decode } from 'jsonwebtoken'
 import { createLogger } from '../../../utils/logger'
 //import Axios from 'axios'
-import { Jwt } from '../../../auth/Jwt'
+/* import { Jwt } from '../../../auth/Jwt'
 import { JwtPayload } from '../../../auth/JwtPayload'
 
 const cert = `-----BEGIN CERTIFICATE-----
@@ -25,7 +25,7 @@ yAfT483sj/y+paZ9yVp/K/kncSLckURRZIV8HfWa/f4zbF9K8IsVukQZV/QAJKYA
 /H65MEUV822jbfvAUVUMcLE6veV7CQQEAqc4KzdmS3zbt7iFrwkmZPba+LTjc1JC
 UflFu8yoMHbW63JDWVKGYo/AXSCXV4xgGGU01sj/K2Xulc1kYSBYlYP8I13zXsCR
 PYgBWRGkaNbHMLS8jcNOXItSSat9r10c0lW4xuJnGI2glb4=
------END CERTIFICATE-----`
+-----END CERTIFICATE-----` */
 
 const logger = createLogger('auth')
 // to verify JWT token signature.
@@ -38,9 +38,9 @@ export const handler = async (
   console.log('Processing event, auth: ', event)
   logger.info('Authorizing a user', event.authorizationToken)
   try {
-    const decodedJwt = await verifyToken(event.authorizationToken)
+    //const decodedJwt = await verifyToken(event.authorizationToken)
     return {
-      principalId: decodedJwt.sub,
+      principalId: "test",//decodedJwt.sub,
       policyDocument: {
         Version: '2012-10-17',
         Statement: [
@@ -72,7 +72,7 @@ export const handler = async (
   }
 }
 
-async function verifyToken(authHeader: string): Promise<JwtPayload> {
+/* async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
   verify(token, cert,{ algorithms: ['RS256'] } )
 
@@ -92,4 +92,4 @@ function getToken(authHeader: string): string {
   const token = split[1]
 
   return token
-}
+} */

@@ -69,7 +69,7 @@ functions:
     events:
       - http:
           method: get
-          path: listing
+          path: listings
 
   createListing:
     handler: src/business/lambda/http/createListing.handler
@@ -93,7 +93,7 @@ functions:
     events:
       - http:
           method: post
-          path: listing
+          path: listings
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
@@ -128,7 +128,7 @@ functions:
     events:
       - http:
           method: patch
-          path: listing/{listingId}
+          path: listings/{listingId}
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
@@ -143,7 +143,7 @@ functions:
     iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Scan
+        - dynamodb:Query
         - dynamodb:DeleteItem
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}
     - Effect: Allow
@@ -160,7 +160,7 @@ functions:
     events:
       - http:
           method: delete
-          path: listing/{listingId}
+          path: listings/{listingId}
           cors: true
           authorizer: Auth
 
@@ -193,7 +193,7 @@ functions:
     events:
       - http:
           method: post
-          path: listing/{listingId}/attachment
+          path: listings/{listingId}/attachment
           cors : true
 
 resources:

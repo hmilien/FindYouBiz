@@ -1,7 +1,7 @@
 import 'source-map-support/register'
 import { createLogger } from '../../../utils/logger'
 import { getUserId} from '../utils'
-import { deleteListing } from "../../../repository/listing";
+import { deleteListing, getListingById } from "../../../repository/listing";
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
 const logger = createLogger('listing')
@@ -12,7 +12,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const listingId = event.pathParameters.listingId
   const userId= getUserId(event)
 
-  await deleteListing(userId,listingId)
+  const item = await getListingById(userId, listingId)
+  await deleteListing(userId,listingId,item.marketId)
 
   logger.info('Listing deleted : ',listingId)
 

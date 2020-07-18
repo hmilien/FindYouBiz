@@ -5,10 +5,10 @@ import { createLogger } from '../../../utils/logger'
 import { getListing } from "../../../repository/listing";
 
 
-const logger = createLogger('todo')
+const logger = createLogger('listing')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('Processing getTodo event: ', event)
+  console.log('Processing getlisting event: ', event)
   
   const userId = getUserId(event)
   const items = await getListing()

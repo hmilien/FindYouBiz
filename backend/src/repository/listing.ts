@@ -19,7 +19,7 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
   }
   
   export async function getListing():Promise<ListingItem[]>{
-    const result = await docClient.query({
+    const result = await docClient.scan({
         TableName : listingTable
     }).promise()
 
@@ -29,12 +29,12 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
         return[]
   }
 
-  export async function  deleteListing(userId:string,listingId:string ) {
+  export async function  deleteListing(userId:string,listingId:string, marketId:string ) {
     const item = await getListingById(userId,listingId)
     console.log('Processing Query for delete: ', item)
     await docClient.delete({
       TableName: listingTable,
-      Key:{ "listingId": listingId, "createdBy":item.createdBy}
+      Key:{"marketId" : marketId, "listingId": listingId, "createdBy":item.createdBy}
     }).promise()
   }
 
@@ -57,6 +57,8 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
   export async function createListing(userId:string,listingId:string, request:CreateListingRequest): Promise<ListingItem>{
     const item = {
         listingId: listingId,
+        marketId:getMarketIdByName(request.marketName),
+        businessCatergoryId:getBusinessCategoryIdByName(request.businessCategoryName),
         createdBy: userId,
         createdAt: new Date().toLocaleTimeString(),
         ...request
@@ -74,7 +76,7 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
     item.pictureUrl = pictureUrl;
     await docClient.update({
       TableName: listingTable,
-      Key:{ "listingId": listingId, "createdAt":item.createdBy},
+      Key:{ marketId:item.marketId,"listingId": listingId, "createdAt":item.createdBy},
       UpdateExpression: "set pictureUrl = :attachmentUrl",
       ExpressionAttributeValues: {
           ":pictureUrl":  item.pictureUrl
@@ -85,4 +87,18 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
     console.log('Url attached: ', pictureUrl)
   }
 
- 
+  function getMarketIdByName(marketName:string):string
+  {
+    if(marketName == "test")
+      return "1"
+    else
+      return "2"
+  }
+
+  function getBusinessCategoryIdByName(businessCategoryName:string):string
+  {
+    if(businessCategoryName == "test")
+      return "1"
+    else
+      return "2"
+  }

@@ -3,20 +3,16 @@
   "title": "listing",
   "type": "object",
   "properties": {
-    "name": {
+    "description": {
       "type": "string"
     },
-    "duedate": {
-      "type": "string"
-    },
-    "done": {
+    "phoneNumber": {
       "type": "string"
     }
   },
   "required": [
-    "name",
-    "duedate",
-    "done"
+    "description",
+    "phoneNumber"
   ],
   "additionalProperties": true
 }

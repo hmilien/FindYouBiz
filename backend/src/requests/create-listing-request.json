@@ -3,15 +3,16 @@
   "title": "listing",
   "type": "object",
   "properties": {
-    "name": {
+    "marketCategoryName": {
       "type": "string"
     },
-    "duedate": {
+    "businessCategoryName": {
       "type": "string"
     }
   },
   "required": [
-    "name"
+    "marketCategoryName",
+    "businessCategoryName"
   ],
   "additionalProperties": true
 }
