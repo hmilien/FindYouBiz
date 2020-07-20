@@ -49,7 +49,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ newListingName: event.target.value })
+    this.setState({ newDescription: event.target.value })
   }
 
   onEditButtonClick = (listingId: string) => {
@@ -70,7 +70,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
       })
       this.setState({
         listings: [...this.state.listings, newListing],
-        newListingName: ''
+        newDescription: ''
       })
     } catch {
       alert('Listing creation failed')
@@ -97,11 +97,6 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
         postalCode:listing.postalCode,
         address:listing.address
       })
-      this.setState({
-        listings: update(this.state.listings, {
-          [pos]: { done: { $set: !listing.createdAt } }
-        })
-      })
     } catch {
       alert('Listing deletion failed')
     }
@@ -124,9 +119,9 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
       <div>
         <Header as="h1">TODOs</Header>
 
-        {this.renderCreateTodoInput()}
+        {this.renderCreateListingInput()}
 
-        {this.renderTodos()}
+        {this.renderListings()}
       </div>
     )
   }

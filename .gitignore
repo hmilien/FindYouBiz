@@ -2,3 +2,4 @@
 backend/node_modules/
 backend/.serverless
 backend/webpack.config.js
+client/node_modules/
