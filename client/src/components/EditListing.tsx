@@ -51,7 +51,7 @@ export class EditListing extends React.PureComponent<
       }
 
       this.setUploadState(UploadState.FetchingPresignedUrl)
-      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.listingId)
+      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.listingId, "2")//TODO : HM
 
       this.setUploadState(UploadState.UploadingFile)
       await uploadFile(uploadUrl, this.state.file)
@@ -76,6 +76,15 @@ export class EditListing extends React.PureComponent<
         <h1>Upload new image</h1>
 
         <Form onSubmit={this.handleSubmit}>
+        <Form.Field>
+            <label>Market name</label>
+            <input
+              type="file"
+              accept="image/*"
+              placeholder="Image to upload"
+              onChange={this.handleFileChange}
+            />
+          </Form.Field>
           <Form.Field>
             <label>File</label>
             <input

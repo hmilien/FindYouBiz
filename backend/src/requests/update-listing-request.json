@@ -3,7 +3,7 @@
   "title": "listing",
   "type": "object",
   "properties": {
-    "description": {
+    "name": {
       "type": "string"
     },
     "phoneNumber": {
@@ -11,7 +11,7 @@
     }
   },
   "required": [
-    "description",
+    "name",
     "phoneNumber"
   ],
   "additionalProperties": true

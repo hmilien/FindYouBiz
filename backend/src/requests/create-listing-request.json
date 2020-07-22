@@ -3,7 +3,10 @@
   "title": "listing",
   "type": "object",
   "properties": {
-    "marketCategoryName": {
+    "name": {
+      "type": "string"
+    },
+    "marketName": {
       "type": "string"
     },
     "businessCategoryName": {
@@ -11,7 +14,8 @@
     }
   },
   "required": [
-    "marketCategoryName",
+    "name",
+    "marketName",
     "businessCategoryName"
   ],
   "additionalProperties": true

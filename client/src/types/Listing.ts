@@ -1,5 +1,6 @@
 export interface Listing {
   listingId: string
+  name:string
   createdBy:string
   createdAt: string
   marketName: string

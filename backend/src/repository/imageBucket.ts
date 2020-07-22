@@ -7,10 +7,15 @@ const s3 = new AWS.S3({
   signatureVersion: 'v4'
 })
 
-export async function getUploadUrl(todoId: string): Promise<string> {
+export async function getUploadUrl(listingId: string): Promise<string> {
+
+     console.log('bucketName', bucketName)
+     console.log('listingId', listingId)
+     console.log('urlExpiration', urlExpiration)
+     
     return s3.getSignedUrl('putObject', {
       Bucket: bucketName,
-      Key: todoId,
+      Key: listingId,
       Expires: urlExpiration
     })
   }

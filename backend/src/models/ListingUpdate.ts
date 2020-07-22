@@ -1,5 +1,6 @@
 export interface ListingUpdate {
   listingId: string
+  name:string  
   marketCategory: {
     CatergoryId:string
     CategoryName: string

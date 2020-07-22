@@ -18,7 +18,7 @@ provider:
     apiGateway: true  
 
   environment:
-      LISTING_TABLE: Listing-${self:provider.stage}
+      LISTING_TABLE: Listing1-${self:provider.stage}
       IMAGES_S3_BUCKET: serverless-listing-images-${self:provider.stage}
       LISTING_ID_INDEX: ListingIdIndex
       SIGNED_URL_EXPIRATION: 300
@@ -160,7 +160,7 @@ functions:
     events:
       - http:
           method: delete
-          path: listings/{listingId}
+          path: listings/{listingId}/{marketId}
           cors: true
           authorizer: Auth
 
@@ -193,7 +193,7 @@ functions:
     events:
       - http:
           method: post
-          path: listings/{listingId}/attachment
+          path: listings/{listingId}/{marketId}/attachment
           cors : true
 
 resources:
@@ -215,14 +215,14 @@ resources:
         AttributeDefinitions:
           - AttributeName: marketId
             AttributeType: S
-          - AttributeName: createdAt
+          - AttributeName: name
             AttributeType: S
           - AttributeName: listingId
             AttributeType: S
         KeySchema:
           - AttributeName: marketId
             KeyType: HASH
-          - AttributeName: createdAt
+          - AttributeName: name
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.LISTING_TABLE}

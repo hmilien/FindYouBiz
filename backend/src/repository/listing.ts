@@ -2,19 +2,24 @@ import * as AWS  from 'aws-sdk';
 import { ListingItem } from "../models/ListingItem";
 import { UpdateListingRequest } from "../requests/updateListingRequest";
 import { CreateListingRequest } from '../requests/createListingRequest';
+import { String } from 'aws-sdk/clients/acm';
 
 const listingTable = process.env.LISTING_TABLE
+const listingIdIndex = process.env.LISTING_ID_INDEX
 const docClient = new AWS.DynamoDB.DocumentClient()
 
-export async function  getListingById(userId:string,listingId:string ): Promise<ListingItem> {
+export async function  getListingById(listingId:string,marketId:String ): Promise<ListingItem> {
     const results = await docClient.query({
       TableName : listingTable,
-      KeyConditionExpression: 'listingId = :listingId and userId = :userId',
+      IndexName : listingIdIndex,
+      KeyConditionExpression: 'marketId = :marketId and listingId = :listingId',
       ExpressionAttributeValues: {
           ':listingId': listingId,
-          ':userId': userId
+          ':marketId': marketId
       }
     }).promise()
+
+    console.log('Listing found', results)
     return results.Items[0] as ListingItem
   }
   
@@ -29,23 +34,24 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
         return[]
   }
 
-  export async function  deleteListing(userId:string,listingId:string, marketId:string ) {
-    const item = await getListingById(userId,listingId)
-    console.log('Processing Query for delete: ', item)
+  export async function  deleteListing(marketId:string, name:string ) {
+    
     await docClient.delete({
       TableName: listingTable,
-      Key:{"marketId" : marketId, "listingId": listingId, "createdBy":item.createdBy}
+      Key:{"marketId" : marketId, "name": name}
     }).promise()
   }
 
-  export async function updateListing(userId:string, listingId, item:UpdateListingRequest){
-    const listingItem = await getListingById(userId,listingId)
+  export async function updateListing(marketId:string, listingId:string, item:UpdateListingRequest){
+    
+    const listingItem = await getListingById(listingId,marketId)
 
     await docClient.update({
       TableName: listingTable,
-      Key:{ "listingId": listingId, "createdBy":listingItem.createdBy},
+      Key:{ "marketId": marketId, "name":listingItem.name},
       UpdateExpression: "set description = :description, phoneNumber= :phoneNumber",
       ExpressionAttributeValues: {
+          "name": item.name,
           ":description": item.description,
           ":phoneNumber": item.phoneNumber
       },
@@ -71,12 +77,12 @@ export async function  getListingById(userId:string,listingId:string ): Promise<
 
       return item as ListingItem
   }
-  export async function  setAttachmentUrl(userId: string, listingId: string, pictureUrl:string){
-    const item = await getListingById(userId, listingId)
+  export async function  setAttachmentUrl(marketId: string, listingId: string, pictureUrl:string){
+    const item = await getListingById(listingId,marketId)
     item.pictureUrl = pictureUrl;
     await docClient.update({
       TableName: listingTable,
-      Key:{ marketId:item.marketId,"listingId": listingId, "createdAt":item.createdBy},
+      Key:{ marketId:item.marketId,"name": item.name},
       UpdateExpression: "set pictureUrl = :attachmentUrl",
       ExpressionAttributeValues: {
           ":pictureUrl":  item.pictureUrl

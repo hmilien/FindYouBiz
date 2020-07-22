@@ -1,8 +1,8 @@
 /**
- * Fields in a request to update a single TODO item.
+ * Fields in a request to update a single LISTING item.
  */
 export interface UpdateListingRequest {
-  listingId: string
+  name:string
   description:string
   phoneNumber:string
 }

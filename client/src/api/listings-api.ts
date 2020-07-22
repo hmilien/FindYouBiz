@@ -17,10 +17,9 @@ export async function getListings(idToken: string): Promise<Listing[]> {
   return response.data.items
 }
 
-export async function createListing(
-  idToken: string,
-  newListing: CreateListingRequest
-): Promise<Listing> {
+export async function createListing(idToken: string, newListing: CreateListingRequest): Promise<Listing> {
+  
+  let test = apiEndpoint
   const response = await Axios.post(`${apiEndpoint}/listings`,  JSON.stringify(newListing), {
     headers: {
       'Content-Type': 'application/json',
@@ -45,9 +44,10 @@ export async function patchListing(
 
 export async function deleteListing(
   idToken: string,
-  listingId: string
+  listingId: string,
+  marketId:string
 ): Promise<void> {
-  await Axios.delete(`${apiEndpoint}/listings/${listingId}`, {
+  await Axios.delete(`${apiEndpoint}/listings/${listingId}/${marketId}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
@@ -57,10 +57,12 @@ export async function deleteListing(
 
 export async function getUploadUrl(
   idToken: string,
-  listingId: string
+  listingId: string, 
+  marketId:string
 ): Promise<string> {
-  const response = await Axios.post(`${apiEndpoint}/listings/${listingId}/attachment`, '', {
+  const response = await Axios.post(`${apiEndpoint}/listings/${listingId}/${marketId}/attachment`, '', {
     headers: {
+      
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${idToken}`
     }

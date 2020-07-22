@@ -25,6 +25,7 @@ interface ListingsProps {
 
 interface ListingsState {
   listings: Listing[]
+  newName:string
   newMarketName:string,
   newBusinessCategoryName:string,
   newBusinessModel:string,
@@ -38,13 +39,14 @@ interface ListingsState {
 export class Listings extends React.PureComponent<ListingsProps, ListingsState> {
   state: ListingsState = {
     listings: [],
-    newMarketName: '',
-    newDescription:'',
-    newBusinessCategoryName:'',
-    newBusinessModel:'',
-    newPhoneNumber:'',
-    newPostalCode:'',
-    newAddress:'',
+    newName: 'La Fourchette 2',
+    newMarketName: 'Montreal',
+    newDescription:'La fourchette',
+    newBusinessCategoryName:'Restaurant',
+    newBusinessModel:'Regulier',
+    newPhoneNumber:'514-979-0626',
+    newPostalCode:'h1t3w8',
+    newAddress:'Rue Francillon',
     loadingListings: true
   }
 
@@ -60,6 +62,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
     try {
       //const dueDate = this.calculateDueDate()
       const newListing = await createListing(this.props.auth.getIdToken(), {
+        name: this.state.newName,
         marketName: this.state.newMarketName,  
         businessCategoryName:this.state.newBusinessCategoryName,
         businessModel:this.state.newBusinessModel,
@@ -72,19 +75,19 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
         listings: [...this.state.listings, newListing],
         newDescription: ''
       })
-    } catch {
-      alert('Listing creation failed')
+    } catch(e) {
+      alert('Listing creation failed :'+ e.message)
     }
   }
 
   onListingDelete = async (listingId: string) => {
     try {
-      await deleteListing(this.props.auth.getIdToken(), listingId)
+      await deleteListing(this.props.auth.getIdToken(), listingId,"2") //todo : stop using hardecoded marketid
       this.setState({
         listings: this.state.listings.filter(listing => listing.listingId != listingId)
       })
-    } catch {
-      alert('Listing deletion failed')
+    } catch(e) {
+      alert('Listing deletion failed:' + e.message)
     }
   }
 
@@ -92,6 +95,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
     try {
       const listing = this.state.listings[pos]
       await patchListing(this.props.auth.getIdToken(), listing.listingId, {
+        name:listing.name,
         description: listing.description,
         phoneNumber: listing.phoneNumber,
         postalCode:listing.postalCode,
@@ -117,7 +121,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
   render() {
     return (
       <div>
-        <Header as="h1">TODOs</Header>
+        <Header as="h1">BUSINESS DIRECTORY</Header>
 
         {this.renderCreateListingInput()}
 
@@ -135,7 +139,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
               color: 'teal',
               labelPosition: 'left',
               icon: 'add',
-              content: 'New task',
+              content: 'New Business',
               onClick: this.onListingCreate
             }}
             fluid

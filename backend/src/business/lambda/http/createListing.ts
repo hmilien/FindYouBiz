@@ -15,17 +15,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const userId = getUserId(event)
     const parsedBody: CreateListingRequest = JSON.parse(event.body)
     
-    if(!parsedBody.marketName){
-      return {
-        statusCode: 404,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        body: "marketCategory is required"
-      }
-    }
-
     const item = await createListing(userId,listingId,parsedBody)
 
     logger.info('New Item added : ',item)

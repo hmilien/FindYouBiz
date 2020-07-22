@@ -1,5 +1,6 @@
 
 export interface CreateListingRequest {
+  name:string
   marketName: string  
   businessCategoryName:string
   businessModel:string
