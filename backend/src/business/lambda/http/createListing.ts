@@ -1,35 +1,36 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import { createLogger } from '../../../utils/logger'
-import { CreateTodoRequest } from '../../../requests/CreateListingRequest'
+import { CreateListingRequest } from '../../../requests/createListingRequest'
 import * as uuid from 'uuid'
 import { getUserId } from '../utils'
-import { createTodo } from "../../../repository/listing";
+import { createListing,getListingByName } from "../../../repository/listing";
 
-const logger = createLogger('todo')
+const logger = createLogger('listing')
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    console.log('Processing event, create todo: ', event)
+    console.log('Processing event, create listing: ', event)
    
     const listingId = uuid.v4()
     const userId = getUserId(event)
-    const parsedBody: CreateTodoRequest = JSON.parse(event.body)
-    
-    if(!parsedBody.name){
-      return {
-        statusCode: 404,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
-        },
-        body: "name is required"
-      }
-    }
+    const parsedBody: CreateListingRequest = JSON.parse(event.body)
 
-    const item = await createTodo(userId,listingId,parsedBody)
+    const listingItem = await getListingByName(listingId,parsedBody.marketName)
+
+    if(listingItem !== undefined)
+     return {
+      statusCode: 400,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body: "name already used"
+    }
+    
+    const item = await createListing(userId,listingId,parsedBody)
 
     logger.info('New Item added : ',item)
-    console.log('Processing event, new Todo: ', item)
+    console.log('Processing event, new listing: ', item)
 
     return {
       statusCode: 201,

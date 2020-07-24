@@ -1,0 +1,279 @@
+service:
+  name: findyourbiz
+
+plugins:
+  - serverless-webpack
+  - serverless-reqvalidator-plugin
+  - serverless-iam-roles-per-function
+  - serverless-aws-documentation
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+   # enable AWS X-Ray Tracing
+  tracing:
+    lambda: true
+    apiGateway: true  
+
+  environment:
+      LISTING_TABLE: Listing1-${self:provider.stage}
+      IMAGES_S3_BUCKET: serverless-listing-images-${self:provider.stage}
+      LISTING_ID_INDEX: ListingIdIndex
+      SIGNED_URL_EXPIRATION: 300
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Listing API
+        description: Serverless application for listing application
+    models:
+      - name: createListingRequest
+        contentType: application/json
+        schema: ${file(src/requests/create-listing-request.json)}
+      - name: updateListingRequest
+        contentType: application/json
+        schema: ${file(src/requests/update-listing-request.json)}
+
+
+functions:
+  Auth:
+    handler: src/business/lambda/auth/auth0Authorizer.handler
+
+  GetListing:
+    handler: src/business/lambda/http/getListing.handler
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}/index/${self:provider.environment.LISTING_ID_INDEX}
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+    - Effect: 'Allow'           # xray tracing permissions
+      Action:
+        - 'xray:PutTraceSegments'             # Trace Segments
+        - 'xray:PutTelemetryRecords'          # Telemetry
+      Resource:
+        - '*'
+    events:
+      - http:
+          method: get
+          path: listings
+
+  createListing:
+    handler: src/business/lambda/http/createListing.handler
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - '*'
+        - dynamodb:PutItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}/index/${self:provider.environment.LISTING_ID_INDEX}
+    - Effect: Allow          
+      Action:
+        - xray:PutTraceSegments           
+        - xray:PutTelemetryRecords         
+      Resource:
+        - '*'
+
+    events:
+      - http:
+          method: post
+          path: listings
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation: 
+            summary: Create a new listing
+            description: Create a new listing
+            requestModels:
+              'application/json': createListingRequest
+
+  UpdateListing:
+    handler: src/business/lambda/http/updateListing.handler
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}/index/${self:provider.environment.LISTING_ID_INDEX}
+    - Effect: Allow          
+      Action:
+        - xray:PutTraceSegments           
+        - xray:PutTelemetryRecords         
+      Resource:
+        - '*'
+
+    events:
+      - http:
+          method: patch
+          path: listings/{listingId}
+          cors: true
+          authorizer: Auth
+          reqValidatorName: RequestBodyValidator
+          documentation: 
+            summary: Update a listing
+            description: Update a listing
+            requestModels:
+              'application/json': updateListingRequest
+
+  DeleteListing:
+    handler: src/business/lambda/http/deleteListing.handler
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}/index/${self:provider.environment.LISTING_ID_INDEX}
+    - Effect: Allow          
+      Action:
+        - xray:PutTraceSegments           
+        - xray:PutTelemetryRecords         
+      Resource:
+        - '*'
+
+    events:
+      - http:
+          method: delete
+          path: listings/{listingId}/{marketId}
+          cors: true
+          authorizer: Auth
+
+  GenerateUploadUrl:
+    handler: src/business/lambda/http/generateUploadUrl.handler
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LISTING_TABLE}/index/${self:provider.environment.LISTING_ID_INDEX}
+    - Effect: Allow          
+      Action:
+        - xray:PutTraceSegments           
+        - xray:PutTelemetryRecords         
+      Resource:
+        - '*'
+    events:
+      - http:
+          method: post
+          path: listings/{listingId}/{marketId}/attachment
+          cors : true
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: ApiGatewayRestApi
+
+    ListingDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: marketId
+            AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+          - AttributeName: listingId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: marketId
+            KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.LISTING_TABLE}
+        LocalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.LISTING_ID_INDEX}
+            KeySchema:
+            - AttributeName: marketId
+              KeyType: HASH
+            - AttributeName: listingId
+              KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: 'request-body-validator'
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: true
+
+    AttachmentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.IMAGES_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: MyPolicy
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
+        Bucket: !Ref AttachmentsBucket

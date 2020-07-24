@@ -6,12 +6,17 @@
     "name": {
       "type": "string"
     },
-    "duedate": {
+    "marketName": {
+      "type": "string"
+    },
+    "businessCategoryName": {
       "type": "string"
     }
   },
   "required": [
-    "name"
+    "name",
+    "marketName",
+    "businessCategoryName"
   ],
   "additionalProperties": true
 }

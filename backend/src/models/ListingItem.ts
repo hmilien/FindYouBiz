@@ -1,9 +1,18 @@
+
 export interface ListingItem {
-  userId: string
   listingId: string
+  name:string
+  marketId:string
+  businessCatergoryId:string
+  createdBy:string
   createdAt: string
-  name: string
-  dueDate: string
-  done: boolean
-  attachmentUrl?: string
+  marketName: string
+  businessCategoryName:string
+  businessModel:string
+  description:string
+  phoneNumber:string
+  postalCode:string
+  address:string
+  pictureUrl?: string
+  
 }

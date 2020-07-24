@@ -4,7 +4,7 @@ import 'source-map-support/register'
 import { verify, decode } from 'jsonwebtoken'
 import { createLogger } from '../../../utils/logger'
 //import Axios from 'axios'
-import { Jwt } from '../../../auth/Jwt'
+ import { Jwt } from '../../../auth/Jwt'
 import { JwtPayload } from '../../../auth/JwtPayload'
 
 const cert = `-----BEGIN CERTIFICATE-----
@@ -25,7 +25,7 @@ yAfT483sj/y+paZ9yVp/K/kncSLckURRZIV8HfWa/f4zbF9K8IsVukQZV/QAJKYA
 /H65MEUV822jbfvAUVUMcLE6veV7CQQEAqc4KzdmS3zbt7iFrwkmZPba+LTjc1JC
 UflFu8yoMHbW63JDWVKGYo/AXSCXV4xgGGU01sj/K2Xulc1kYSBYlYP8I13zXsCR
 PYgBWRGkaNbHMLS8jcNOXItSSat9r10c0lW4xuJnGI2glb4=
------END CERTIFICATE-----`
+-----END CERTIFICATE-----` 
 
 const logger = createLogger('auth')
 // to verify JWT token signature.
@@ -92,4 +92,4 @@ function getToken(authHeader: string): string {
   const token = split[1]
 
   return token
-}
+} 

@@ -1,7 +1,13 @@
 /**
  * Fields in a request to create a single TODO item.
  */
-export interface CreateTodoRequest {
-  name: string
-  dueDate: string
+export interface CreateListingRequest {
+  name:string,
+  marketName: string  
+  businessCategoryName:string
+  businessModel:string
+  description:string
+  phoneNumber:string
+  postalCode:string
+  address:string
 }
