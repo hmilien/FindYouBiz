@@ -12,23 +12,15 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const listingId = event.pathParameters.listingId
   const marketId = event.pathParameters.marketId
 
-  const listingItem = await getListingById(listingId,marketId)
-    
-  if(listingItem === undefined)
-    return {
-      statusCode: 404,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-      },
-      body: `not found`
-    }
+  console.log('Processing delete listing for listingId: ', listingId)
 
-  console.log('Processing delete listing for listingId: ', listingItem.name)
+  const listingItem = await getListingById(listingId,marketId)
+
+  console.log('Processing delete listing for listing name: ', listingItem.name)
 
   await deleteListing(marketId,listingItem.name)
 
-  logger.info('Listing deleted : ',listingId)
+  logger.info('Listing deleted : ',listingItem.name)
 
   return {
     statusCode: 202,

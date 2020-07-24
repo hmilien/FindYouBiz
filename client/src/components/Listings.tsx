@@ -51,7 +51,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ newDescription: event.target.value })
+    this.setState({ newName: event.target.value })
   }
 
   onEditButtonClick = (listingId: string) => {
@@ -60,7 +60,6 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
 
   onListingCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
-      //const dueDate = this.calculateDueDate()
       const newListing = await createListing(this.props.auth.getIdToken(), {
         name: this.state.newName,
         marketName: this.state.newMarketName,  

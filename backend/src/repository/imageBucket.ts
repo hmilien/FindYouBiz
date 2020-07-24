@@ -9,15 +9,13 @@ const s3 = new AWS.S3({
 
 export async function getUploadUrl(listingId: string): Promise<string> {
 
-     console.log('bucketName', bucketName)
-     console.log('listingId', listingId)
-     console.log('urlExpiration', urlExpiration)
-     
-    return s3.getSignedUrl('putObject', {
+     var url = s3.getSignedUrl('putObject', {
       Bucket: bucketName,
       Key: listingId,
       Expires: urlExpiration
     })
+     
+    return url    
   }
 
   export function getAttachmentUrl(listingId: string): string {

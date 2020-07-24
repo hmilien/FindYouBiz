@@ -13,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   console.log('Caller event - PresignedUrl', event)
   
-  const url = getUploadUrl(listingId)
+  const url = await getUploadUrl(listingId)
 
   logger.info('Url generated : ',url)
   

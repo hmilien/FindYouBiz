@@ -85,16 +85,6 @@ export class EditListing extends React.PureComponent<
               onChange={this.handleFileChange}
             />
           </Form.Field>
-          <Form.Field>
-            <label>File</label>
-            <input
-              type="file"
-              accept="image/*"
-              placeholder="Image to upload"
-              onChange={this.handleFileChange}
-            />
-          </Form.Field>
-
           {this.renderButton()}
         </Form>
       </div>

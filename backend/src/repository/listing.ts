@@ -22,6 +22,21 @@ export async function  getListingById(listingId:string,marketId:String ): Promis
     console.log('Listing found', results)
     return results.Items[0] as ListingItem
   }
+
+  export async function  getListingByName(name:string,marketName:String ): Promise<ListingItem> {
+    const results = await docClient.query({
+      TableName : listingTable,
+      ExpressionAttributeNames: {"#N": "name"},
+      KeyConditionExpression: 'marketId = :marketId and #N = :name',
+      ExpressionAttributeValues: {
+          ':name': name,
+          ':marketId': getMarketIdByName(marketName)
+      }
+    }).promise()
+
+    console.log('Listing found', results)
+    return results.Items[0] as ListingItem
+  }
   
   export async function getListing():Promise<ListingItem[]>{
     const result = await docClient.scan({
@@ -82,8 +97,8 @@ export async function  getListingById(listingId:string,marketId:String ): Promis
     item.pictureUrl = pictureUrl;
     await docClient.update({
       TableName: listingTable,
-      Key:{ marketId:item.marketId,"name": item.name},
-      UpdateExpression: "set pictureUrl = :attachmentUrl",
+      Key:{ "marketId":item.marketId, "name": item.name},
+      UpdateExpression: "set pictureUrl = :pictureUrl",
       ExpressionAttributeValues: {
           ":pictureUrl":  item.pictureUrl
       },
