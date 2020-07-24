@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { parseUserId } from "../../auth/utils";
+import { ListingItem } from "../../models/ListingItem";
 
 /**
  * Get a user id from an API Gateway event
@@ -16,3 +17,8 @@ export function getUserId(event: APIGatewayProxyEvent): string {
     return parseUserId(jwtToken)
     return jwtToken;
   } 
+
+  export function canUpdateItem(event: APIGatewayProxyEvent, item: ListingItem) :boolean{
+    const currentUserId = getUserId(event)
+    return currentUserId === item.createdBy 
+  }

@@ -2,6 +2,8 @@ import 'source-map-support/register'
 import { createLogger } from '../../../utils/logger'
 //import { getUserId} from '../utils'
 import { deleteListing,getListingById } from "../../../repository/listing";
+import { canUpdateItem } from "../utils";
+
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 
 const logger = createLogger('listing')
@@ -15,6 +17,16 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   console.log('Processing delete listing for listingId: ', listingId)
 
   const listingItem = await getListingById(listingId,marketId)
+
+  if(!canUpdateItem(event,listingItem))
+  return {
+    statusCode: 401,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
+    body: `Not authorized`
+  }
 
   console.log('Processing delete listing for listing name: ', listingItem.name)
 
