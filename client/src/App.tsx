@@ -3,7 +3,8 @@ import { Link, Route, Router, Switch } from 'react-router-dom'
 import { Grid, Menu, Segment } from 'semantic-ui-react'
 
 import Auth from './auth/Auth'
-import { EditListing } from './components/EditListing'
+import { EditListing} from './components/EditListing'
+import { CreateListing} from './components/CreateListing'
 import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
 import { Listings } from './components/Listings'
@@ -101,6 +102,22 @@ export default class App extends Component<AppProps, AppState> {
           exact
           render={props => {
             return <EditListing {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/listings/create"
+          exact
+          render={props => {
+            return <CreateListing {...props} auth={this.props.auth} />
+          }}
+        />
+
+        <Route
+          path="/listings/"
+          exact
+          render={props => {
+            return <Listings {...props} auth={this.props.auth} />
           }}
         />
 

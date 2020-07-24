@@ -39,14 +39,14 @@ interface ListingsState {
 export class Listings extends React.PureComponent<ListingsProps, ListingsState> {
   state: ListingsState = {
     listings: [],
-    newName: 'La Fourchette 2',
-    newMarketName: 'Montreal',
-    newDescription:'La fourchette',
-    newBusinessCategoryName:'Restaurant',
-    newBusinessModel:'Regulier',
-    newPhoneNumber:'514-979-0626',
-    newPostalCode:'h1t3w8',
-    newAddress:'Rue Francillon',
+    newName: '',
+    newMarketName: '',
+    newDescription:'',
+    newBusinessCategoryName:'',
+    newBusinessModel:'',
+    newPhoneNumber:'',
+    newPostalCode:'',
+    newAddress:'',
     loadingListings: true
   }
 
@@ -58,22 +58,10 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
     this.props.history.push(`/listings/${listingId}/edit`)
   }
 
+
   onListingCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
-      const newListing = await createListing(this.props.auth.getIdToken(), {
-        name: this.state.newName,
-        marketName: this.state.newMarketName,  
-        businessCategoryName:this.state.newBusinessCategoryName,
-        businessModel:this.state.newBusinessModel,
-        description:this.state.newDescription,
-        phoneNumber:this.state.newPhoneNumber,
-        postalCode:this.state.newPostalCode,
-        address:this.state.newAddress
-      })
-      this.setState({
-        listings: [...this.state.listings, newListing],
-        newDescription: ''
-      })
+       this.props.history.push(`/listings/create`)
     } catch(e) {
       alert('Listing creation failed :'+ e.message)
     }
@@ -89,22 +77,7 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
       alert('Listing deletion failed:' + e.message)
     }
   }
-
-  onListingCheck = async (pos: number) => {
-    try {
-      const listing = this.state.listings[pos]
-      await patchListing(this.props.auth.getIdToken(), listing.listingId, {
-        name:listing.name,
-        description: listing.description,
-        phoneNumber: listing.phoneNumber,
-        postalCode:listing.postalCode,
-        address:listing.address
-      })
-    } catch {
-      alert('Listing deletion failed')
-    }
-  }
-
+  
   async componentDidMount() {
     try {
       const listings = await getListings(this.props.auth.getIdToken())
@@ -121,37 +94,22 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
     return (
       <div>
         <Header as="h1">BUSINESS DIRECTORY</Header>
-
-        {this.renderCreateListingInput()}
-
         {this.renderListings()}
+        {this.renderCreateListingInput()}
       </div>
     )
   }
 
   renderCreateListingInput() {
     return (
-      <Grid.Row>
-        <Grid.Column width={16}>
-          <Input
+             <Input
             action={{
-              color: 'teal',
+              color: 'blue',
               labelPosition: 'left',
               icon: 'add',
               content: 'New Business',
               onClick: this.onListingCreate
-            }}
-            fluid
-            actionPosition="left"
-            placeholder="To change the world..."
-            onChange={this.handleNameChange}
-          />
-        </Grid.Column>
-        <Grid.Column width={16}>
-          <Divider />
-        </Grid.Column>
-      </Grid.Row>
-    )
+            }} /> )
   }
 
   renderListings() {
@@ -177,17 +135,23 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
       <Grid padded>
         {this.state.listings.map((listing, pos) => {
           return (
-            <Grid.Row key={listing.listingId}>
-              <Grid.Column width={1} verticalAlign="middle">
-                <Checkbox
-                  onChange={() => this.onListingCheck(pos)}
-                  checked={listing.createdAt != undefined}
-                />
+            <Grid.Row key={listing.listingId}>    
+             {listing.pictureUrl && (
+                <Image src={listing.pictureUrl} size="small" wrapped />
+              )}          
+              <Grid.Column width={2} floated="right">
+                {listing.name}
               </Grid.Column>
-              <Grid.Column width={10} verticalAlign="middle">
+              <Grid.Column width={2} verticalAlign="middle">
                 {listing.description}
               </Grid.Column>
-              <Grid.Column width={3} floated="right">
+              <Grid.Column width={2} verticalAlign="middle">
+                {listing.address}
+              </Grid.Column>
+              <Grid.Column width={2} verticalAlign="middle">
+                {listing.businessCategoryName}
+              </Grid.Column>
+              <Grid.Column width={2} floated="right">
                 {listing.phoneNumber}
               </Grid.Column>
               <Grid.Column width={1} floated="right">
@@ -196,21 +160,16 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
                   color="blue"
                   onClick={() => this.onEditButtonClick(listing.listingId)}
                 >
-                  <Icon name="pencil" />
+                <Icon name="pencil" />
                 </Button>
               </Grid.Column>
               <Grid.Column width={1} floated="right">
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onListingDelete(listing.listingId)}
-                >
-                  <Icon name="delete" />
+                  onClick={() => this.onListingDelete(listing.listingId)}>     <Icon name="delete" />
                 </Button>
-              </Grid.Column>
-              {listing.pictureUrl && (
-                <Image src={listing.pictureUrl} size="small" wrapped />
-              )}
+              </Grid.Column>             
               <Grid.Column width={16}>
                 <Divider />
               </Grid.Column>
@@ -219,12 +178,5 @@ export class Listings extends React.PureComponent<ListingsProps, ListingsState> 
         })}
       </Grid>
     )
-  }
-
-  /* calculateDueDate(): string {
-    const date = new Date()
-    date.setDate(date.getDate() + 7)
-
-    return dateFormat(date, 'yyyy-mm-dd') as string
-  } */
+  }  
 }

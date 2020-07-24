@@ -1,15 +1,11 @@
 import * as React from 'react'
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Grid, GridRow, GridColumn } from 'semantic-ui-react'
 import Auth from '../auth/Auth'
-import { getUploadUrl, uploadFile } from '../api/listings-api'
+import { History } from 'history'
+import {createListing } from '../api/listings-api'
 
-enum UploadState {
-  NoUpload,
-  FetchingPresignedUrl,
-  UploadingFile,
-}
-
-interface EditListingProps {
+interface CreateListingProps {
+  history: History
   match: {
     params: {
       listingId: string
@@ -18,92 +14,136 @@ interface EditListingProps {
   auth: Auth
 }
 
-interface EditListingState {
-  file: any
-  uploadState: UploadState
+interface CreateListingState {
+  newName: string,
+  newMarketName: string,
+  newDescription:string,
+  newBusinessCategoryName:string,
+  newBusinessModel:string,
+  newPhoneNumber:string,
+  newPostalCode:string,
+  newAddress:string,
+  loadingListings: true   
 }
 
-export class EditListing extends React.PureComponent<
-  EditListingProps,
-  EditListingState
-> {
-  state: EditListingState = {
-    file: undefined,
-    uploadState: UploadState.NoUpload
+export class CreateListing extends React.PureComponent< CreateListingProps, CreateListingState> {
+      state: CreateListingState = {
+      newName: '',
+      newMarketName: '',
+      newDescription:'',
+      newBusinessCategoryName:'',
+      newBusinessModel:'',
+      newPhoneNumber:'',
+      newPostalCode:'',
+      newAddress:'',
+      loadingListings: true   
+    }
+  
+  handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newName: event.target.value })
   }
 
-  handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (!files) return
+  handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newDescription: event.target.value })
+  }
 
-    this.setState({
-      file: files[0]
-    })
+  handleAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newAddress: event.target.value })
+  }
+
+  handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ newPhoneNumber: event.target.value })
   }
 
   handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault()
 
     try {
-      if (!this.state.file) {
-        alert('File should be selected')
+      
+      if(!this.state.newName || !this.state.newDescription || !this.state.newPhoneNumber || !this.state.newAddress)
+      {
+        alert('All fields are required')
         return
       }
+        
+      const newListing = await createListing(this.props.auth.getIdToken(), {
+        name: this.state.newName,
+        marketName: this.state.newMarketName,  
+        businessCategoryName:this.state.newBusinessCategoryName,
+        businessModel:this.state.newBusinessModel,
+        description:this.state.newDescription,
+        phoneNumber:this.state.newPhoneNumber,
+        postalCode:this.state.newPostalCode,
+        address:this.state.newAddress
+      })      
+      
+      if(newListing)
+            this.props.history.push(`/listings/`)
 
-      this.setUploadState(UploadState.FetchingPresignedUrl)
-      const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.match.params.listingId,"2") //TODO:HM
-
-      this.setUploadState(UploadState.UploadingFile)
-      await uploadFile(uploadUrl, this.state.file)
-
-      alert('File was uploaded!')
     } catch (e) {
-      alert('Could not upload a file: ' + e.message)
-    } finally {
-      this.setUploadState(UploadState.NoUpload)
-    }
+      alert('Could not create : ' + e.message)
+    } 
   }
-
-  setUploadState(uploadState: UploadState) {
-    this.setState({
-      uploadState
-    })
-  }
-
-  render() {
+  
+  render() 
+  {
     return (
       <div>
-        <h1>Upload new image</h1>
+        <h1>Create new business</h1>
 
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Field>
-            <label>File</label>
-            <input
-              type="file"
-              accept="image/*"
-              placeholder="Image to upload"
-              onChange={this.handleFileChange}
-            />
-          </Form.Field>
+        {this.renderInput()}
 
+        <Form onSubmit={this.handleSubmit}>          
           {this.renderButton()}
         </Form>
       </div>
     )
   }
 
-  renderButton() {
+  renderInput(){
+    return(
+       
+      <Grid padded>
+      <GridRow>
+        <GridColumn width={2}>
+             <label>Name : </label>
+        </GridColumn>          
+        <GridColumn>
+           <input type="text" onChange={this.handleNameChange} />
+        </GridColumn>
+      </GridRow>
+      <GridRow>
+        <GridColumn width={2}>
+             <label>Description : </label>
+        </GridColumn>          
+        <GridColumn>
+           <input type="text" onChange={this.handleDescriptionChange} />
+        </GridColumn>
+      </GridRow>
+      <GridRow>
+        <GridColumn width={2}>
+             <label>Address : </label>
+        </GridColumn>          
+        <GridColumn>
+           <input type="text" onChange={this.handleAddressChange} />
+        </GridColumn>
+      </GridRow>
+      <GridRow>
+        <GridColumn width={2}>
+             <label>Phone : </label>
+        </GridColumn>          
+        <GridColumn>
+           <input type="text" onChange={this.handlePhoneChange} />
+        </GridColumn>
+      </GridRow>     
+    </Grid>  
+    )
+  }
 
+  renderButton() {
     return (
       <div>
-        {this.state.uploadState === UploadState.FetchingPresignedUrl && <p>Uploading image metadata</p>}
-        {this.state.uploadState === UploadState.UploadingFile && <p>Uploading file</p>}
-        <Button
-          loading={this.state.uploadState !== UploadState.NoUpload}
-          type="submit"
-        >
-          Upload
-        </Button>
+        <Button type="submit" color="blue"  > Submit </Button>
       </div>
     )
   }

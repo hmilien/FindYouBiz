@@ -13,8 +13,8 @@ This application will allow creating/removing/updating/fetching business items. 
 The application should store business items, and each business item contains the following fields:
 
 * `listingId` (string) - a unique id for an business entry
-* `marketId` (string) - a unique Id to specify the market that the business target
-  `marketName` (string) - name associated with the marketId (e.g...USA,Cananda, Chicago, World)
+* `marketId` (string) - a unique Id to specify the market that the business target. 
+  `marketName` (string) - name associated with the marketId (e.g...USA,Cananda, Chicago, World) Hard coded for now as 1: world 2: Canada
 * `name` (string) - name of a business entry (e.g. "RONA"). Must be unique by market
 * `businessCatergoryId` (string) -an id to identify the business category 
   `businessCatergoryName` (string) -name associated with the id identify the business category (e.g. retail, online services...)
