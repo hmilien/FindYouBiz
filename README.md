@@ -6,7 +6,7 @@ We  need to implement a simple Business directory application using AWS Lambda a
 
 # Functionality of the application
 
-This application will allow creating/removing/updating/fetching business items. Each business item can optionally have an attachment image. Each user can update or delete only business items that he/she has created.
+This application will allow creating/removing/updating/fetching business items. Each business item can optionally have an attachment image. Each user can update or delete only business items that he/she has created. even if he see all the listing, he cannot delete the ones he did not create.
 
 # Business items
 
@@ -44,8 +44,4 @@ To implement the project, we implement the following functions and configure the
 
 It should return a JSON object that looks like this:
 
-```json
-{
-  "uploadUrl": "https://s3-bucket-name.s3.eu-west-2.amazonaws.com/image.png"
-}
-```
+Note : you might need to execute : npm install react-scripts --save to have the client running
